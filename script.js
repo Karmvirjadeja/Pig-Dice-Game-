@@ -11,36 +11,66 @@ const btnHold = document.querySelector('.btn--hold');
 const current0El = document.getElementById('current--0');
 const current1El = document.getElementById('current--1');
 
+//Switching the function
+
+const switchPlayer = function () {
+  document.getElementById(`current--${activePlayer}`).textContent = 0;
+  currentScore = 0;
+  activePlayer = activePlayer === 0 ? 1 : 0;
+
+  player0El.classList.toggle('player--active');
+  player1El.classList.toggle('player--active');
+};
+
 //Starting condition
 score0El.textContent = 0;
 score1El.textContent = 0;
 diceEl.classList.add('hidden');
-
+let playing = true;
 let scores = [0, 0];
 let currentScore = 0;
 let activePlayer = 0;
 //Rolling dice functionality
 btnRoll.addEventListener('click', function () {
-  //Generating a random dice
-  let dice = Math.trunc(Math.random() * 6) + 1;
-  //Displaying the dice
-  diceEl.classList.remove('hidden');
-  diceEl.src = `dice-${dice}.png`;
-  //Checking that if the dice is 1
+  if (playing) {
+    //Generating a random dice
+    let dice = Math.trunc(Math.random() * 6) + 1;
+    //Displaying the dice
+    diceEl.classList.remove('hidden');
+    diceEl.src = `dice-${dice}.png`;
+    //Checking that if the dice is 1
 
-  if (dice != 1) {
-    //add dice to the current score
-    currentScore += dice;
+    if (dice != 1) {
+      //add dice to the current score
+      currentScore += dice;
 
-    document.getElementById(`current--${activePlayer}`).textContent =
-      currentScore;
-  } else {
-    //Switch to the next player and the first player score equal to zero
-    document.getElementById(`current--${activePlayer}`).textContent = 0;
-    currentScore = 0;
-    activePlayer = activePlayer === 0 ? 1 : 0;
+      document.getElementById(`current--${activePlayer}`).textContent =
+        currentScore;
+    } else {
+      //Switch to the next player and the first player score equal to zero
+      switchPlayer();
+    }
+  }
+});
 
-    player0El.classList.toggle('player--active');
-    player1El.classList.toggle('player--active');
+btnHold.addEventListener('click', function () {
+  if (playing) {
+    scores[activePlayer] += currentScore;
+
+    document.getElementById(`score--${activePlayer}`).textContent =
+      scores[activePlayer];
+
+    if (scores[activePlayer] >= 20) {
+      playing = false;
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.add(`player--winner`);
+
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove(`player--active`);
+    } else {
+      switchPlayer();
+    }
   }
 });
