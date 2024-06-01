@@ -22,6 +22,8 @@ const switchPlayer = function () {
   player1El.classList.toggle('player--active');
 };
 
+//Initial Condition function
+
 //Starting condition
 score0El.textContent = 0;
 score1El.textContent = 0;
@@ -73,4 +75,21 @@ btnHold.addEventListener('click', function () {
       switchPlayer();
     }
   }
+});
+
+btnNew.addEventListener('click', function () {
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  current0El.textContent = 0;
+  current1El.textContent = 0;
+
+  player0El.classList.remove('player--winner');
+  player1El.classList.remove('player--winner');
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+
+  playing = true;
+  scores = [0, 0];
+  currentScore = 0;
+  activePlayer = 0;
 });
